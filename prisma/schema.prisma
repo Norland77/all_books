@@ -1,0 +1,238 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int                  @id @default(autoincrement())
+  username     String               @unique
+  email        String               @unique
+  password     String
+  first_name   String
+  last_name    String
+  gender       Gender               @relation(fields: [genderId], references: [id])
+  genderId     Int
+  avatar       String
+  country      Country              @relation(fields: [coutryId], references: [id])
+  coutryId     Int
+  role         Role                 @relation(fields: [roleId], references: [id])
+  following    Following[]
+  followed     Followed[]
+  roleId       Int
+  isBanned     Bans?
+  books        UserBooks[]
+  shelfs       Shelf[]
+  reviews      Reviews[]
+  reviewsLikes ReviewsLikeDislike[]
+}
+
+model ResetPassword {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String
+  createdAt DateTime @default(now())
+}
+
+model Shelf {
+  id     Int          @id @default(autoincrement())
+  name   String
+  user   User         @relation(fields: [userId], references: [id])
+  userId Int
+  books  ShelfBooks[]
+}
+
+model ShelfBooks {
+  shelf   Shelf @relation(fields: [shelfId], references: [id])
+  shelfId Int
+  book    Book  @relation(fields: [bookId], references: [id])
+  bookId  Int
+
+  @@id([bookId, shelfId])
+}
+
+model Gender {
+  id   Int    @id @default(autoincrement())
+  name String
+  user User[]
+}
+
+model Country {
+  id        Int         @id @default(autoincrement())
+  name      String
+  user      User[]
+  publisher Publisher[]
+  Book      Book[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  user User[]
+}
+
+model Followed {
+  id         Int  @id @default(autoincrement())
+  followed   User @relation(fields: [followedId], references: [id])
+  followedId Int
+}
+
+model Following {
+  id          Int  @id @default(autoincrement())
+  following   User @relation(fields: [followingId], references: [id])
+  followingId Int
+}
+
+model Bans {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int      @unique
+  bannedAt   DateTime @default(now())
+  unbannedAt DateTime
+  reason     String
+}
+
+model UserBooks {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  book      Book     @relation(fields: [bookId], references: [id])
+  bookId    Int
+  status    Status   @relation(fields: [statusId], references: [id])
+  statusId  Int
+  addedAt   DateTime @default(now())
+  readEndAt DateTime
+
+  @@id([bookId, userId])
+}
+
+model Status {
+  id          Int         @id @default(autoincrement())
+  description String      @unique
+  userBooks   UserBooks[]
+}
+
+model Reviews {
+  id        Int                  @id @default(autoincrement())
+  book      Book                 @relation(fields: [bookId], references: [id])
+  bookId    Int
+  user      User                 @relation(fields: [userId], references: [id])
+  userId    Int
+  rating    Int
+  title     String
+  body      String
+  createdAt DateTime
+  likes     ReviewsLikeDislike[]
+}
+
+model ReviewsLikeDislike {
+  id       Int     @id @default(autoincrement())
+  reviev   Reviews @relation(fields: [reviewId], references: [id])
+  reviewId Int
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int
+  isLike   Boolean
+}
+
+model Book {
+  id                 Int          @id @default(autoincrement())
+  title              String       @unique
+  authors            BookAuthor[]
+  genres             BookGenres[]
+  isbn               String       @unique
+  publicationDate    DateTime
+  numberOfPages      Int
+  language           String
+  image              String
+  description        String
+  publisher          Publisher    @relation(fields: [publisherId], references: [id])
+  publisherId        Int
+  publicationCountry Country      @relation(fields: [countryId], references: [id])
+  countryId          Int
+  binding            Binding      @relation(fields: [bindingId], references: [id])
+  bindingId          Int
+  awards             BookAwards[]
+  users              UserBooks[]
+  shelfs             ShelfBooks[]
+  reviews            Reviews[]
+}
+
+model Awards {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  date        DateTime
+  books       BookAwards[]
+}
+
+model BookAwards {
+  book     Book   @relation(fields: [bookId], references: [id])
+  bookId   Int
+  award    Awards @relation(fields: [awardsId], references: [id])
+  awardsId Int
+
+  @@id([bookId, awardsId])
+}
+
+model Binding {
+  id   Int    @id @default(autoincrement())
+  name String
+  book Book[]
+}
+
+model Publisher {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  books     Book[]
+  Country   Country @relation(fields: [countryId], references: [id])
+  countryId Int
+}
+
+model Genre {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String
+  books       BookGenres[]
+  parentId    Int?
+  children    Genre[]      @relation("genre-hierarchy")
+  parent      Genre?       @relation("genre-hierarchy", fields: [genreId], references: [id])
+  genreId     Int?
+}
+
+model BookGenres {
+  book    Book  @relation(fields: [bookId], references: [id])
+  bookId  Int
+  genre   Genre @relation(fields: [genreId], references: [id])
+  genreId Int
+
+  @@id([bookId])
+}
+
+model Author {
+  id          Int          @id @default(autoincrement())
+  books       BookAuthor[]
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  country     String
+  image       String
+  bio         String
+}
+
+model BookAuthor {
+  book     Book   @relation(fields: [bookId], references: [id])
+  bookId   Int
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  @@id([bookId, authorId])
+}
+
+model News {
+  id          Int      @id @default(autoincrement())
+  title       String   @unique
+  description String
+  date        DateTime
+}
