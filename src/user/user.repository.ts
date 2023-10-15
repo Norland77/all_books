@@ -1,4 +1,3 @@
-import { User } from '../../prisma/generated/client';
 import { PrismaService } from '@prisma/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { genSaltSync, hashSync } from 'bcrypt';
@@ -8,18 +7,15 @@ import { Controller } from '@nestjs/common';
 export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getUserByName(
-    username: string,
-    email: string,
-  ): Promise<Promise<User> | null> {
-    return this.prismaService.user.findFirstOrThrow({
+  getUserByName(username: string, email: string) {
+    return this.prismaService.user.findFirst({
       where: {
         OR: [{ username: username }, { email: email }],
       },
     });
   }
 
-  async createUser(dto: CreateUserDto) {
+  createUser(dto: CreateUserDto) {
     const hashedPassword = this.hashPassword(dto.password);
     return this.prismaService.user.create({
       data: {
@@ -46,5 +42,21 @@ export class UserRepository {
 
   private hashPassword(password: string) {
     return hashSync(password, genSaltSync(10));
+  }
+
+  findUserById(Id: number){
+    return this.prismaService.user.findFirstOrThrow({
+      where: {
+        id: Id,
+      },
+    });
+  }
+
+  deleteUserById(Id: number) {
+    return this.prismaService.user.delete({
+      where: {
+        id: Id,
+      },
+    });
   }
 }

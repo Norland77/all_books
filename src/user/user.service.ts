@@ -13,4 +13,12 @@ export class UserService {
   async createUser(dto: CreateUserDto) {
     return await this.userRepository.createUser(dto);
   }
+
+  async findUserById(Id: number) {
+    return await this.userRepository.findUserById(Id);
+  }
+
+  async deleteUserById(Id: number) {
+    return await this.userRepository.deleteUserById(Id);
+  }
 }
