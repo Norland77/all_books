@@ -1,5 +1,7 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -17,8 +19,7 @@ model User {
   gender       Gender               @relation(fields: [genderId], references: [id])
   genderId     Int
   avatar       String
-  country      Country              @relation(fields: [coutryId], references: [id])
-  coutryId     Int
+  country      String
   role         Role                 @relation(fields: [roleId], references: [id])
   following    Following[]
   followed     Followed[]
@@ -58,14 +59,6 @@ model Gender {
   id   Int    @id @default(autoincrement())
   name String
   user User[]
-}
-
-model Country {
-  id        Int         @id @default(autoincrement())
-  name      String
-  user      User[]
-  publisher Publisher[]
-  Book      Book[]
 }
 
 model Role {
@@ -149,8 +142,7 @@ model Book {
   description        String
   publisher          Publisher    @relation(fields: [publisherId], references: [id])
   publisherId        Int
-  publicationCountry Country      @relation(fields: [countryId], references: [id])
-  countryId          Int
+  publicationCountry String
   binding            Binding      @relation(fields: [bindingId], references: [id])
   bindingId          Int
   awards             BookAwards[]
@@ -186,8 +178,7 @@ model Publisher {
   id        Int     @id @default(autoincrement())
   name      String  @unique
   books     Book[]
-  Country   Country @relation(fields: [countryId], references: [id])
-  countryId Int
+  Country   String
 }
 
 model Genre {
