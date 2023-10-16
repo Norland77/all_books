@@ -26,13 +26,11 @@ export class UserController {
 
   @Get(':Id')
   async findUserById(@Param('Id') Id: string) {
-    const numberId = Number(Id);
-    return await this.userService.findUserById(numberId);
+    return await this.userService.findUserById(Id);
   }
 
   @Delete(':Id')
   async deleteUserById(@Param('Id') Id: string) {
-    const numberId = Number(Id);
-    return await this.userService.deleteUserById(numberId);
+    return await this.userService.deleteUserById(Id);
   }
 }

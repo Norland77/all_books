@@ -35,7 +35,7 @@ export class AuthRepository {
     });
   }
 
-  async login(dto: LoginDto): Promise<IToken> {
+  async login(dto: LoginDto, agent: string): Promise<IToken> {
     const user = await this.userService
       .findUserByEmail(dto.email)
       .catch((err) => {
@@ -46,10 +46,10 @@ export class AuthRepository {
     if (!user || !compareSync(dto.password, user.password)) {
       throw new UnauthorizedException('Wrong login or password');
     }
-    return this.generateTokens(user);
+    return this.generateTokens(user, agent);
   }
 
-  async refreshTokens(refreshToken: string): Promise<IToken> {
+  async refreshTokens(refreshToken: string, agent: string): Promise<IToken> {
     const token = await this.prismaService.token.findUnique({
       where: { token: refreshToken },
     });
@@ -63,10 +63,10 @@ export class AuthRepository {
       throw new UnauthorizedException();
     }
     const user = await this.userService.findUserById(token.userId);
-    return this.generateTokens(user);
+    return this.generateTokens(user, agent);
   }
 
-  private async generateTokens(user: User): Promise<IToken> {
+  private async generateTokens(user: User, agent: string): Promise<IToken> {
     const accessToken =
       'Bearer ' +
       this.jwtService.sign({
@@ -75,17 +75,30 @@ export class AuthRepository {
         role: user.roleId,
       });
 
-    const refreshToken = await this.getRefreshToken(user.id);
+    const refreshToken = await this.getRefreshToken(user.id, agent);
 
     return { accessToken, refreshToken };
   }
 
-  private async getRefreshToken(userId: number): Promise<Token> {
-    return this.prismaService.token.create({
-      data: {
+  private async getRefreshToken(userId: string, agent: string): Promise<Token> {
+    const _token = await this.prismaService.token.findFirst({
+      where: {
+        userId: userId,
+        userAgent: agent,
+      },
+    });
+    const token = _token?.token ?? '';
+    return this.prismaService.token.upsert({
+      where: { token },
+      update: {
+        token: v4(),
+        exp: add(new Date(), { months: 1 }),
+      },
+      create: {
         token: v4(),
         exp: add(new Date(), { months: 1 }),
         userId,
+        userAgent: agent,
       },
     });
   }

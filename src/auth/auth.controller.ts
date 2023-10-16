@@ -13,7 +13,7 @@ import { LoginDto, RegisterDto } from './dto';
 import { IToken } from './interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { Cookie } from '../../libs/common/src/decorators';
+import { Cookie, UserAgent } from '../../libs/common/src/decorators';
 
 const REFRESH_TOKEN = 'refreshtoken';
 @Controller('auth')
@@ -32,12 +32,16 @@ export class AuthController {
         `Can't register user with data ${JSON.stringify(dto)}`,
       );
     }
+    return user;
   }
 
   @Post('login')
-  async login(@Body() dto: LoginDto, @Res() res: Response) {
-    const token = await this.authService.login(dto);
-
+  async login(
+    @Body() dto: LoginDto,
+    @Res() res: Response,
+    @UserAgent() agent: string,
+  ) {
+    const token = await this.authService.login(dto, agent);
     if (!token) {
       throw new BadRequestException(
         `Can't login user with data ${JSON.stringify(dto)}`,
@@ -50,13 +54,14 @@ export class AuthController {
   async refreshToken(
     @Cookie(REFRESH_TOKEN) refreshToken: string,
     @Res() res: Response,
+    @UserAgent() agent: string,
   ) {
     const string = '';
     if (typeof refreshToken !== typeof string) {
       throw new UnauthorizedException();
     }
 
-    const token = await this.authService.refreshTokens(refreshToken);
+    const token = await this.authService.refreshTokens(refreshToken, agent);
     if (!token) {
       throw new UnauthorizedException();
     }

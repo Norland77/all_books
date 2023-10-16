@@ -44,7 +44,7 @@ export class UserRepository {
     return hashSync(password, genSaltSync(10));
   }
 
-  findUserById(Id: number) {
+  findUserById(Id: string) {
     return this.prismaService.user.findFirstOrThrow({
       where: {
         id: Id,
@@ -52,7 +52,7 @@ export class UserRepository {
     });
   }
 
-  deleteUserById(Id: number) {
+  deleteUserById(Id: string) {
     return this.prismaService.user.delete({
       where: {
         id: Id,

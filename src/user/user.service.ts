@@ -14,11 +14,11 @@ export class UserService {
     return await this.userRepository.createUser(dto);
   }
 
-  async findUserById(Id: number) {
+  async findUserById(Id: string) {
     return await this.userRepository.findUserById(Id);
   }
 
-  async deleteUserById(Id: number) {
+  async deleteUserById(Id: string) {
     return await this.userRepository.deleteUserById(Id);
   }
 

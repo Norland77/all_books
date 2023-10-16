@@ -10,11 +10,11 @@ export class AuthService {
     return this.authRepository.register(dto);
   }
 
-  login(dto: LoginDto) {
-    return this.authRepository.login(dto);
+  login(dto: LoginDto, agent: string) {
+    return this.authRepository.login(dto, agent);
   }
 
-  refreshTokens(refreshToken: string) {
-    return this.authRepository.refreshTokens(refreshToken);
+  refreshTokens(refreshToken: string, agent: string) {
+    return this.authRepository.refreshTokens(refreshToken, agent);
   }
 }

@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
+  provider      = "prisma-client-js"
+  output        = "./generated/client"
   binaryTargets = ["native", "linux-musl"]
 }
 
@@ -10,55 +10,56 @@ datasource db {
 }
 
 model User {
-  id           Int                  @id @default(autoincrement())
+  id           String               @id @default(uuid())
   username     String               @unique
   email        String               @unique
   password     String
-  first_name   String @default("")
-  last_name    String @default("")
+  first_name   String               @default("")
+  last_name    String               @default("")
   gender       Gender               @relation(fields: [genderId], references: [id])
-  genderId     Int @default(3)
-  avatar       String @default("")
-  country      String @default("")
+  genderId     Int                  @default(3)
+  avatar       String               @default("")
+  country      String               @default("")
   role         Role                 @relation(fields: [roleId], references: [id])
   following    Following[]
   followed     Followed[]
-  roleId       Int @default(1)
+  roleId       Int                  @default(1)
   isBanned     Bans?
   books        UserBooks[]
   shelfs       Shelf[]
   reviews      Reviews[]
   reviewsLikes ReviewsLikeDislike[]
-  token Token[]
+  token        Token[]
 }
 
 model Token {
-  token String @unique
-  exp DateTime
-  user User @relation(fields: [userId], references: [id])
-  userId Int
+  token     String   @unique
+  exp       DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  userAgent String
 }
 
 model ResetPassword {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   email     String
   token     String
   createdAt DateTime @default(now())
 }
 
 model Shelf {
-  id     Int          @id @default(autoincrement())
+  id     String       @id @default(uuid())
   name   String
   user   User         @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   books  ShelfBooks[]
 }
 
 model ShelfBooks {
-  shelf   Shelf @relation(fields: [shelfId], references: [id])
-  shelfId Int
-  book    Book  @relation(fields: [bookId], references: [id])
-  bookId  Int
+  shelf   Shelf  @relation(fields: [shelfId], references: [id])
+  shelfId String
+  book    Book   @relation(fields: [bookId], references: [id])
+  bookId  String
 
   @@id([bookId, shelfId])
 }
@@ -76,21 +77,21 @@ model Role {
 }
 
 model Followed {
-  id         Int  @id @default(autoincrement())
-  followed   User @relation(fields: [followedId], references: [id])
-  followedId Int
+  id         String @id @default(uuid())
+  followed   User   @relation(fields: [followedId], references: [id])
+  followedId String
 }
 
 model Following {
-  id          Int  @id @default(autoincrement())
-  following   User @relation(fields: [followingId], references: [id])
-  followingId Int
+  id          String @id @default(uuid())
+  following   User   @relation(fields: [followingId], references: [id])
+  followingId String
 }
 
 model Bans {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   user       User     @relation(fields: [userId], references: [id])
-  userId     Int      @unique
+  userId     String   @unique
   bannedAt   DateTime @default(now())
   unbannedAt DateTime
   reason     String
@@ -98,9 +99,9 @@ model Bans {
 
 model UserBooks {
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   book      Book     @relation(fields: [bookId], references: [id])
-  bookId    Int
+  bookId    String
   status    Status   @relation(fields: [statusId], references: [id])
   statusId  Int
   addedAt   DateTime @default(now())
@@ -116,11 +117,11 @@ model Status {
 }
 
 model Reviews {
-  id        Int                  @id @default(autoincrement())
+  id        String               @id @default(uuid())
   book      Book                 @relation(fields: [bookId], references: [id])
-  bookId    Int
+  bookId    String
   user      User                 @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   rating    Int
   title     String
   body      String
@@ -131,14 +132,14 @@ model Reviews {
 model ReviewsLikeDislike {
   id       Int     @id @default(autoincrement())
   reviev   Reviews @relation(fields: [reviewId], references: [id])
-  reviewId Int
+  reviewId String
   user     User    @relation(fields: [userId], references: [id])
-  userId   Int
+  userId   String
   isLike   Boolean
 }
 
 model Book {
-  id                 Int          @id @default(autoincrement())
+  id                 String       @id @default(uuid())
   title              String       @unique
   authors            BookAuthor[]
   genres             BookGenres[]
@@ -149,7 +150,7 @@ model Book {
   image              String
   description        String
   publisher          Publisher    @relation(fields: [publisherId], references: [id])
-  publisherId        Int
+  publisherId        String
   publicationCountry String
   binding            Binding      @relation(fields: [bindingId], references: [id])
   bindingId          Int
@@ -160,7 +161,7 @@ model Book {
 }
 
 model Awards {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   name        String
   description String
   date        DateTime
@@ -169,9 +170,9 @@ model Awards {
 
 model BookAwards {
   book     Book   @relation(fields: [bookId], references: [id])
-  bookId   Int
+  bookId   String
   award    Awards @relation(fields: [awardsId], references: [id])
-  awardsId Int
+  awardsId String
 
   @@id([bookId, awardsId])
 }
@@ -183,34 +184,34 @@ model Binding {
 }
 
 model Publisher {
-  id        Int     @id @default(autoincrement())
-  name      String  @unique
-  books     Book[]
-  Country   String
+  id      String @id @default(uuid())
+  name    String @unique
+  books   Book[]
+  Country String
 }
 
 model Genre {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   name        String       @unique
   description String
   books       BookGenres[]
   parentId    Int?
   children    Genre[]      @relation("genre-hierarchy")
   parent      Genre?       @relation("genre-hierarchy", fields: [genreId], references: [id])
-  genreId     Int?
+  genreId     String?
 }
 
 model BookGenres {
-  book    Book  @relation(fields: [bookId], references: [id])
-  bookId  Int
-  genre   Genre @relation(fields: [genreId], references: [id])
-  genreId Int
+  book    Book   @relation(fields: [bookId], references: [id])
+  bookId  String
+  genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String
 
   @@id([bookId])
 }
 
 model Author {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   books       BookAuthor[]
   firstName   String
   lastName    String
@@ -222,15 +223,15 @@ model Author {
 
 model BookAuthor {
   book     Book   @relation(fields: [bookId], references: [id])
-  bookId   Int
+  bookId   String
   author   Author @relation(fields: [authorId], references: [id])
-  authorId Int
+  authorId String
 
   @@id([bookId, authorId])
 }
 
 model News {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   title       String   @unique
   description String
   date        DateTime
