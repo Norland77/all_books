@@ -21,4 +21,8 @@ export class UserService {
   async deleteUserById(Id: number) {
     return await this.userRepository.deleteUserById(Id);
   }
+
+  async findUserByEmail(email: string) {
+    return await this.userRepository.findUserByEmail(email);
+  }
 }

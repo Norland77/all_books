@@ -1,30 +1,33 @@
-import { IsNotEmpty, IsEmail, MinLength } from 'class-validator';
+import { IsNotEmpty, IsEmail, MinLength, IsString } from 'class-validator';
 
 export class CreateUserDto {
-  id: number;
-
+  @IsString()
   @IsNotEmpty()
   username: string;
 
+  @IsString()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
+  @IsString()
   @MinLength(8)
+  @IsNotEmpty()
   password: string;
 
+  @IsString()
   first_name: string;
 
+  @IsString()
   last_name: string;
 
   genderId: number;
 
+  @IsString()
   country: string;
 
   roleId: number;
 
+  @IsString()
   avatar: string;
-
-  isBanned: boolean;
-
-  gender: object[];
 }

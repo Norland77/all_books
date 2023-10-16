@@ -1,5 +1,4 @@
 import { Controller } from '@nestjs/common';
-import { GenderService } from './gender.service';
 import { CreateGenderDto } from './dto/gender.dto';
 import { PrismaService } from '@prisma/prisma.service';
 
