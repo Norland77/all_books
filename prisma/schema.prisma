@@ -20,6 +20,8 @@ model User {
   genderId     Int                  @default(3)
   avatar       String               @default("")
   country      String               @default("")
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
   role         Role                 @relation(fields: [roleId], references: [id])
   following    Following[]
   followed     Followed[]

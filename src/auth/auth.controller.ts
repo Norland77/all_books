@@ -1,13 +1,13 @@
 import {
   BadRequestException,
-  Body,
+  Body, ClassSerializerInterceptor,
   Controller,
   Get,
   HttpStatus,
   Post,
   Res,
-  UnauthorizedException,
-} from '@nestjs/common';
+  UnauthorizedException, UseInterceptors
+} from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { IToken } from './interfaces';
@@ -25,6 +25,7 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     const user = await this.authService.register(dto);

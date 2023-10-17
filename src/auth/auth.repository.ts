@@ -8,12 +8,13 @@ import { LoginDto, RegisterDto } from './dto';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { IToken } from './interfaces';
-import { Token, User } from '../../prisma/generated/client';
+import { Token } from '../../prisma/generated/client';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@prisma/prisma.service';
 import { v4 } from 'uuid';
 import { add } from 'date-fns';
+import { IUser } from './interfaces/IUser';
 
 @Controller('user')
 export class AuthRepository {
@@ -63,16 +64,20 @@ export class AuthRepository {
       throw new UnauthorizedException();
     }
     const user = await this.userService.findUserById(token.userId);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     return this.generateTokens(user, agent);
   }
 
-  private async generateTokens(user: User, agent: string): Promise<IToken> {
+  private async generateTokens(user: IUser, agent: string): Promise<IToken> {
     const accessToken =
       'Bearer ' +
       this.jwtService.sign({
         id: user.id,
         email: user.email,
-        role: user.roleId,
+        role: user.role.id,
       });
 
     const refreshToken = await this.getRefreshToken(user.id, agent);
