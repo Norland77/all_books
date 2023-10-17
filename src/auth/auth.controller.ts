@@ -13,9 +13,11 @@ import { LoginDto, RegisterDto } from './dto';
 import { IToken } from './interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { Cookie, UserAgent } from '../../libs/common/src/decorators';
+import { Cookie, UserAgent, Public } from '../../libs/common/src/decorators';
 
 const REFRESH_TOKEN = 'refreshtoken';
+
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(
