@@ -1,7 +1,8 @@
 import { CreateUserDto } from './dto/user.dto';
 import { genSaltSync, hashSync } from 'bcrypt';
-import { Controller } from '@nestjs/common';
+import { Controller, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
+import { IJwtPayload } from '../auth/interfaces';
 
 @Controller('user')
 export class UserRepository {
@@ -86,10 +87,16 @@ export class UserRepository {
     }
   }
 
-  deleteUserById(Id: string) {
+  deleteUserById(Id: string, user: IJwtPayload) {
+    if (user.id !== Id || user.role !== 2) {
+      throw new ForbiddenException();
+    }
     return this.prismaService.user.delete({
       where: {
         id: Id,
+      },
+      select: {
+        id: true,
       },
     });
   }

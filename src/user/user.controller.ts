@@ -1,28 +1,11 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/user.dto';
+import { CurrentUser } from '../../libs/common/src/decorators';
+import { IJwtPayload } from '../auth/interfaces';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post('create')
-  async createUser(@Body() dto: CreateUserDto) {
-    const user = await this.userService.getUserByName(dto.username, dto.email);
-
-    if (user) {
-      throw new BadRequestException('This username or email is already in use');
-    }
-    return await this.userService.createUser(dto);
-  }
 
   @Get(':Id')
   async findUserById(@Param('Id') Id: string) {
@@ -30,7 +13,10 @@ export class UserController {
   }
 
   @Delete(':Id')
-  async deleteUserById(@Param('Id') Id: string) {
-    return await this.userService.deleteUserById(Id);
+  async deleteUserById(
+    @Param('Id') Id: string,
+    @CurrentUser() user: IJwtPayload,
+  ) {
+    return await this.userService.deleteUserById(Id, user);
   }
 }

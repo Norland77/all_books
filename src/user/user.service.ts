@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from './dto/user.dto';
+import { IJwtPayload } from "../auth/interfaces";
 
 @Injectable()
 export class UserService {
@@ -18,8 +19,8 @@ export class UserService {
     return await this.userRepository.findUserById(Id);
   }
 
-  async deleteUserById(Id: string) {
-    return await this.userRepository.deleteUserById(Id);
+  async deleteUserById(Id: string, user: IJwtPayload) {
+    return await this.userRepository.deleteUserById(Id, user);
   }
 
   async findUserByEmail(email: string) {

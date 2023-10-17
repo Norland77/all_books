@@ -50,6 +50,10 @@ export class AuthRepository {
     return this.generateTokens(user, agent);
   }
 
+  logout(refreshToken: string) {
+    return this.prismaService.token.delete({ where: { token: refreshToken } });
+  }
+
   async refreshTokens(refreshToken: string, agent: string): Promise<IToken> {
     const token = await this.prismaService.token.findUnique({
       where: { token: refreshToken },
