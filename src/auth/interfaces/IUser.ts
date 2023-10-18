@@ -6,14 +6,7 @@ export interface IUser {
   last_name: string;
   country: string;
   avatar: string;
-  role: {
-    id: number | undefined;
-    name: string | undefined;
-  };
-  gender: {
-    id: number | undefined;
-    name: string | undefined;
-  };
+  role: string[];
   createdAt: Date;
   updatedAt: Date;
 }

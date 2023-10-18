@@ -26,7 +26,7 @@ export class CreateUserDto {
   @IsString()
   country: string;
 
-  roleId: number;
+  role: string;
 
   @IsString()
   avatar: string;

@@ -1,7 +1,10 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CurrentUser } from '../../libs/common/src/decorators';
+import { CurrentUser, Roles } from '../../libs/common/src/decorators';
 import { IJwtPayload } from '../auth/interfaces';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { $Enums } from '../../prisma/generated/client';
+import UserRole = $Enums.UserRole;
 
 @Controller('user')
 export class UserController {
@@ -12,6 +15,8 @@ export class UserController {
     return await this.userService.findUserById(Id);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Delete(':Id')
   async deleteUserById(
     @Param('Id') Id: string,

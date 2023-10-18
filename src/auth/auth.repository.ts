@@ -81,7 +81,7 @@ export class AuthRepository {
       this.jwtService.sign({
         id: user.id,
         email: user.email,
-        role: user.role.id,
+        role: user.role,
       });
 
     const refreshToken = await this.getRefreshToken(user.id, agent);

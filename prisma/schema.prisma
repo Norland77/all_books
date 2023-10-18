@@ -22,10 +22,9 @@ model User {
   country      String               @default("")
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
-  role         Role                 @relation(fields: [roleId], references: [id])
+  role         UserRole[]
   following    Following[]
   followed     Followed[]
-  roleId       Int                  @default(1)
   isBanned     Bans?
   books        UserBooks[]
   shelfs       Shelf[]
@@ -72,10 +71,9 @@ model Gender {
   user User[]
 }
 
-model Role {
-  id   Int    @id @default(autoincrement())
-  name String
-  user User[]
+enum UserRole {
+  ADMIN
+  USER
 }
 
 model Followed {

@@ -28,7 +28,7 @@ export class RegisterDto {
   @IsString()
   country: string = '';
 
-  roleId: number = 1;
+  role: string;
 
   @IsString()
   avatar: string = '';

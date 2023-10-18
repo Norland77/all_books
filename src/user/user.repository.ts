@@ -32,11 +32,7 @@ export class UserRepository {
             id: dto.genderId,
           },
         },
-        role: {
-          connect: {
-            id: dto.roleId,
-          },
-        },
+        role: dto.role === 'Admin' ? ['USER', 'ADMIN'] : ['USER'],
       },
     });
   }
@@ -53,11 +49,6 @@ export class UserRepository {
     });
 
     if (user) {
-      const role = await this.prismaService.role.findFirst({
-        where: {
-          id: user.roleId,
-        },
-      });
       const gender = await this.prismaService.gender.findFirst({
         where: {
           id: user.genderId,
@@ -71,10 +62,7 @@ export class UserRepository {
         last_name: user.last_name,
         country: user.country,
         avatar: user.avatar,
-        role: {
-          id: role?.id,
-          name: role?.name,
-        },
+        role: user.role,
         gender: {
           id: gender?.id,
           name: gender?.name,
@@ -88,9 +76,9 @@ export class UserRepository {
   }
 
   deleteUserById(Id: string, user: IJwtPayload) {
-    if (user.id !== Id || user.role !== 2) {
+    /*if (user.id !== Id || user.role !== 2) {
       throw new ForbiddenException();
-    }
+    }*/
     return this.prismaService.user.delete({
       where: {
         id: Id,
@@ -109,11 +97,6 @@ export class UserRepository {
     });
 
     if (user) {
-      const role = await this.prismaService.role.findFirst({
-        where: {
-          id: user.roleId,
-        },
-      });
       const gender = await this.prismaService.gender.findFirst({
         where: {
           id: user.genderId,
@@ -128,10 +111,7 @@ export class UserRepository {
         last_name: user.last_name,
         country: user.country,
         avatar: user.avatar,
-        role: {
-          id: role?.id,
-          name: role?.name,
-        },
+        role: user.role,
         gender: {
           id: gender?.id,
           name: gender?.name,
