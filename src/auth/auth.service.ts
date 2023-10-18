@@ -21,4 +21,8 @@ export class AuthService {
   async logout(refreshToken: string) {
     return this.authRepository.logout(refreshToken);
   }
+
+  async googleAuth(email: string, agent: string) {
+    return this.authRepository.googleAuth(email, agent);
+  }
 }

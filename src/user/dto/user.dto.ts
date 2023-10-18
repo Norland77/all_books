@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsEmail, MinLength, IsString } from 'class-validator';
+import { Provider } from '../../../prisma/generated/client';
 
 export class CreateUserDto {
   @IsString()
@@ -12,22 +13,23 @@ export class CreateUserDto {
 
   @IsString()
   @MinLength(8)
-  @IsNotEmpty()
-  password: string;
+  password?: string;
 
   @IsString()
-  first_name: string;
+  first_name?: string;
 
   @IsString()
-  last_name: string;
+  last_name?: string;
 
-  genderId: number;
-
-  @IsString()
-  country: string;
-
-  role: string;
+  genderId?: number;
 
   @IsString()
-  avatar: string;
+  country?: string;
+
+  role?: string;
+
+  @IsString()
+  avatar?: string;
+
+  provider?: Provider;
 }

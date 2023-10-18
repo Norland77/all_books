@@ -23,6 +23,7 @@ model User {
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
   role         UserRole[]
+  provider     Provider?
   following    Following[]
   followed     Followed[]
   isBanned     Bans?
@@ -31,6 +32,16 @@ model User {
   reviews      Reviews[]
   reviewsLikes ReviewsLikeDislike[]
   token        Token[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum Provider {
+  GOOGLE
+  FACEBOOK
 }
 
 model Token {
@@ -69,11 +80,6 @@ model Gender {
   id   Int    @id @default(autoincrement())
   name String
   user User[]
-}
-
-enum UserRole {
-  ADMIN
-  USER
 }
 
 model Followed {

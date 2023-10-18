@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from './dto/user.dto';
-import { IJwtPayload } from "../auth/interfaces";
+import { IJwtPayload } from '../auth/interfaces';
 
 @Injectable()
 export class UserService {

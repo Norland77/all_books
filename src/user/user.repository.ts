@@ -1,14 +1,20 @@
 import { CreateUserDto } from './dto/user.dto';
 import { genSaltSync, hashSync } from 'bcrypt';
-import { Controller, ForbiddenException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { IJwtPayload } from '../auth/interfaces';
+/*import { CACHE_MANAGER } from '@nestjs/cache-manager';*/
 
 @Controller('user')
 export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   getUserByName(username: string, email: string) {
+    console.log('getUserByName');
     return this.prismaService.user.findFirst({
       where: {
         OR: [{ username: username }, { email: email }],
@@ -33,11 +39,15 @@ export class UserRepository {
           },
         },
         role: dto.role === 'Admin' ? ['USER', 'ADMIN'] : ['USER'],
+        provider: dto.provider,
       },
     });
   }
 
-  private hashPassword(password: string) {
+  private hashPassword(password: string | undefined) {
+    if (!password) {
+      return '';
+    }
     return hashSync(password, genSaltSync(10));
   }
 

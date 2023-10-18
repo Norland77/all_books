@@ -8,7 +8,7 @@ import { LoginDto, RegisterDto } from './dto';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { IToken } from './interfaces';
-import { Token } from '../../prisma/generated/client';
+import { Provider, Token } from '../../prisma/generated/client';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@prisma/prisma.service';
@@ -110,5 +110,30 @@ export class AuthRepository {
         userAgent: agent,
       },
     });
+  }
+
+  async googleAuth(email: string, agent: string) {
+    const userExist = await this.userService.findUserByEmail(email);
+
+    if (userExist) {
+      return this.generateTokens(userExist, agent);
+    }
+    const user = await this.userService
+      .createUser({
+        username: email,
+        email,
+        genderId: 3,
+        provider: Provider.GOOGLE,
+      })
+      .catch((err) => {
+        this.logger.error(err);
+        return null;
+      });
+    if (!user) {
+      throw new BadRequestException(
+        `Failed to create user with email: ${email} in GoogleAuth`,
+      );
+    }
+    return this.generateTokens(user, agent);
   }
 }
