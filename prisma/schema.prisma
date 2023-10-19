@@ -196,10 +196,9 @@ model Genre {
   name        String       @unique
   description String
   books       BookGenres[]
-  parentId    Int?
   children    Genre[]      @relation("genre-hierarchy")
-  parent      Genre?       @relation("genre-hierarchy", fields: [genreId], references: [id])
-  genreId     String?
+  parent      Genre?       @relation("genre-hierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId     String?
 }
 
 model BookGenres {
