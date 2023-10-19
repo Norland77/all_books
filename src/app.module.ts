@@ -10,6 +10,7 @@ import { BansModule } from './bans/bans.module';
 import { FollowModule } from './follow/follow.module';
 import { GenreModule } from './genre/genre.module';
 import { AuthorModule } from './author/author.module';
+import { PublisherModule } from './publisher/publisher.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthorModule } from './author/author.module';
     FollowModule,
     GenreModule,
     AuthorModule,
+    PublisherModule,
   ],
   controllers: [],
   providers: [
