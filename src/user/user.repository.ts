@@ -1,10 +1,6 @@
 import { CreateUserDto } from './dto/user-create.dto';
 import { genSaltSync, hashSync } from 'bcrypt';
-import {
-  BadRequestException,
-  Controller,
-  ForbiddenException,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { UpdateUserDto } from './dto/user-update.dto';
 
@@ -95,6 +91,8 @@ export class UserRepository {
         createdAt: true,
         avatar: true,
         country: true,
+        isBanned: true,
+        Banned: true,
       },
     });
   }

@@ -28,6 +28,8 @@ export class CreateUserDto {
 
   role?: string;
 
+  isBanned?: boolean;
+
   @IsString()
   avatar?: string;
 

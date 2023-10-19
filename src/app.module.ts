@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { BansModule } from './bans/bans.module';
+import { FollowModule } from './follow/follow.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     GenderModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    BansModule,
+    FollowModule,
   ],
   controllers: [],
   providers: [
