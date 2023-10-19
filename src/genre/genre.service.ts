@@ -25,4 +25,8 @@ export class GenreService {
   deleteGenreById(Id: string) {
     return this.genreRepository.deleteGenreById(Id);
   }
+
+  getAllGenres() {
+    return this.genreRepository.getAllGenres();
+  }
 }

@@ -9,6 +9,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { BansModule } from './bans/bans.module';
 import { FollowModule } from './follow/follow.module';
 import { GenreModule } from './genre/genre.module';
+import { AuthorModule } from './author/author.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { GenreModule } from './genre/genre.module';
     BansModule,
     FollowModule,
     GenreModule,
+    AuthorModule,
   ],
   controllers: [],
   providers: [

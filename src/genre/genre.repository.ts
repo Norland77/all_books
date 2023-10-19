@@ -55,4 +55,8 @@ export class GenreRepository {
       },
     });
   }
+
+  getAllGenres() {
+    return this.prismaService.genre.findMany();
+  }
 }

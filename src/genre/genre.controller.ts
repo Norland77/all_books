@@ -38,4 +38,9 @@ export class GenreController {
 
     return this.genreService.deleteGenreById(Id);
   }
+
+  @Get('all')
+  async getAllGenres() {
+    return this.genreService.getAllGenres();
+  }
 }
