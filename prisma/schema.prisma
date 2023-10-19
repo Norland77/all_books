@@ -26,7 +26,6 @@ model User {
   role         UserRole[]
   provider     Provider?
   following    Following[]
-  followed     Followed[]
   Banned       Bans[]
   books        UserBooks[]
   shelfs       Shelf[]
@@ -83,23 +82,18 @@ model Gender {
   user User[]
 }
 
-model Followed {
-  id         String @id @default(uuid())
-  followed   User   @relation(fields: [followedId], references: [id])
-  followedId String
-}
-
 model Following {
   id          String @id @default(uuid())
-  following   User   @relation(fields: [followingId], references: [id])
+  userId      String
+  following   User   @relation(fields: [userId], references: [id])
   followingId String
 }
 
 model Bans {
-  id         String   @id @default(uuid())
-  user       User     @relation(fields: [userId], references: [id])
+  id         String    @id @default(uuid())
+  user       User      @relation(fields: [userId], references: [id])
   userId     String
-  bannedAt   DateTime @default(now())
+  bannedAt   DateTime  @default(now())
   unbannedAt DateTime?
   reason     String
 }

@@ -93,6 +93,10 @@ export class UserRepository {
         country: true,
         isBanned: true,
         Banned: true,
+        reviews: true,
+        books: true,
+        shelfs: true,
+        following: true,
       },
     });
   }
@@ -125,6 +129,17 @@ export class UserRepository {
         createdAt: true,
         avatar: true,
         country: true,
+      },
+    });
+  }
+
+  findUserByRefreshToken(token: string) {
+    return this.prismaService.token.findFirst({
+      where: {
+        token,
+      },
+      select: {
+        userId: true,
       },
     });
   }
