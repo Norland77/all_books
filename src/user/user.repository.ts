@@ -1,4 +1,4 @@
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/user-create.dto';
 import { genSaltSync, hashSync } from 'bcrypt';
 import {
   BadRequestException,
@@ -6,8 +6,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
-import { IJwtPayload } from '../auth/interfaces';
-/*import { CACHE_MANAGER } from '@nestjs/cache-manager';*/
+import { UpdateUserDto } from './dto/user-update.dto';
 
 @Controller('user')
 export class UserRepository {
@@ -44,6 +43,35 @@ export class UserRepository {
     });
   }
 
+  async updateUserById(Id: string, dto: UpdateUserDto) {
+    console.log(dto);
+    return this.prismaService.user.update({
+      where: {
+        id: Id,
+      },
+      data: {
+        username: dto.username,
+        first_name: dto.first_name,
+        last_name: dto.last_name,
+        genderId: dto.genderId,
+        country: dto.country,
+        avatar: dto.avatar,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        first_name: true,
+        last_name: true,
+        gender: true,
+        role: true,
+        createdAt: true,
+        avatar: true,
+        country: true,
+      },
+    });
+  }
+
   private hashPassword(password: string | undefined) {
     if (!password) {
       return '';
@@ -52,43 +80,26 @@ export class UserRepository {
   }
 
   async findUserById(Id: string) {
-    const user = await this.prismaService.user.findFirst({
+    return this.prismaService.user.findFirst({
       where: {
         id: Id,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        first_name: true,
+        last_name: true,
+        gender: true,
+        role: true,
+        createdAt: true,
+        avatar: true,
+        country: true,
+      },
     });
-
-    if (user) {
-      const gender = await this.prismaService.gender.findFirst({
-        where: {
-          id: user.genderId,
-        },
-      });
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        country: user.country,
-        avatar: user.avatar,
-        role: user.role,
-        gender: {
-          id: gender?.id,
-          name: gender?.name,
-        },
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      };
-    } else {
-      return null;
-    }
   }
 
-  deleteUserById(Id: string, user: IJwtPayload) {
-    /*if (user.id !== Id || user.role !== 2) {
-      throw new ForbiddenException();
-    }*/
+  deleteUserById(Id: string) {
     return this.prismaService.user.delete({
       where: {
         id: Id,
@@ -100,37 +111,23 @@ export class UserRepository {
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.prismaService.user.findFirst({
+    return this.prismaService.user.findFirst({
       where: {
         email: email,
       },
+      select: {
+        id: true,
+        username: true,
+        password: true,
+        email: true,
+        first_name: true,
+        last_name: true,
+        gender: true,
+        role: true,
+        createdAt: true,
+        avatar: true,
+        country: true,
+      },
     });
-
-    if (user) {
-      const gender = await this.prismaService.gender.findFirst({
-        where: {
-          id: user.genderId,
-        },
-      });
-      return {
-        id: user.id,
-        username: user.username,
-        password: user.password,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        country: user.country,
-        avatar: user.avatar,
-        role: user.role,
-        gender: {
-          id: gender?.id,
-          name: gender?.name,
-        },
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      };
-    } else {
-      return null;
-    }
   }
 }

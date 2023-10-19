@@ -21,7 +21,7 @@ import { Request, Response } from 'express';
 import { Cookie, UserAgent, Public } from '../../libs/common/src/decorators';
 import { GoogleGuard } from './guards/google.guard';
 import { HttpService } from '@nestjs/axios';
-import { mergeMap } from 'rxjs';
+import { map, mergeMap } from 'rxjs';
 import { handlerTimeoutAndErrors } from '../../libs/common/src/helpers';
 
 const REFRESH_TOKEN = 'refreshtoken';
@@ -48,6 +48,7 @@ export class AuthController {
     return user;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
   async login(
     @Body() dto: LoginDto,
@@ -106,6 +107,7 @@ export class AuthController {
   @UseGuards(GoogleGuard)
   @Get('google/callback')
   googleAuthCallback(@Req() req: Request, @Res() res: Response) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const token = req.user['accessToken'];
     return res.redirect(
@@ -114,7 +116,11 @@ export class AuthController {
   }
 
   @Get('success')
-  success(@Query('token') token: string, @UserAgent() agent: string) {
+  success(
+    @Query('token') token: string,
+    @UserAgent() agent: string,
+    @Res() res: Response,
+  ) {
     return this.httpService
       .get(
         `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`,
@@ -123,6 +129,7 @@ export class AuthController {
         mergeMap(({ data: { email } }) =>
           this.authService.googleAuth(email, agent),
         ),
+        map((data) => this.setRefreshTokenToCookies(data, res)),
         handlerTimeoutAndErrors(),
       );
   }

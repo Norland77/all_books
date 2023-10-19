@@ -8,5 +8,4 @@ export interface IUser {
   avatar: string;
   role: string[];
   createdAt: Date;
-  updatedAt: Date;
 }

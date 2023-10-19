@@ -1,10 +1,18 @@
-import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CurrentUser, Roles } from '../../libs/common/src/decorators';
-import { IJwtPayload } from '../auth/interfaces';
+import { Roles } from '../../libs/common/src/decorators';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { $Enums } from '../../prisma/generated/client';
 import UserRole = $Enums.UserRole;
+import { UpdateUserDto } from './dto/user-update.dto';
 
 @Controller('user')
 export class UserController {
@@ -18,10 +26,12 @@ export class UserController {
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
   @Delete(':Id')
-  async deleteUserById(
-    @Param('Id') Id: string,
-    @CurrentUser() user: IJwtPayload,
-  ) {
-    return await this.userService.deleteUserById(Id, user);
+  async deleteUserById(@Param('Id') Id: string) {
+    return await this.userService.deleteUserById(Id);
+  }
+
+  @Put('update/:Id')
+  async updateUserById(@Param('Id') Id: string, @Body() dto: UpdateUserDto) {
+    return await this.userService.updateUserById(Id, dto);
   }
 }
