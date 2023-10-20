@@ -153,12 +153,18 @@ model Book {
   publisher          Publisher    @relation(fields: [publisherId], references: [id])
   publisherId        String
   publicationCountry String
-  binding            Binding      @relation(fields: [bindingId], references: [id])
+  binding            Binding[]
   bindingId          Int
   awards             BookAwards[]
   users              UserBooks[]
   shelfs             ShelfBooks[]
   reviews            Reviews[]
+}
+
+enum Binding {
+  HARDCOVER
+  PAPERBACK
+  EBOOK
 }
 
 model Awards {
@@ -176,12 +182,6 @@ model BookAwards {
   awardsId String
 
   @@id([bookId, awardsId])
-}
-
-model Binding {
-  id   Int    @id @default(autoincrement())
-  name String
-  book Book[]
 }
 
 model Publisher {

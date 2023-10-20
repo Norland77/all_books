@@ -11,6 +11,7 @@ import { FollowModule } from './follow/follow.module';
 import { GenreModule } from './genre/genre.module';
 import { AuthorModule } from './author/author.module';
 import { PublisherModule } from './publisher/publisher.module';
+import { AwardsModule } from './awards/awards.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PublisherModule } from './publisher/publisher.module';
     GenreModule,
     AuthorModule,
     PublisherModule,
+    AwardsModule,
   ],
   controllers: [],
   providers: [
