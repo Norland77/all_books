@@ -12,6 +12,7 @@ import { GenreModule } from './genre/genre.module';
 import { AuthorModule } from './author/author.module';
 import { PublisherModule } from './publisher/publisher.module';
 import { AwardsModule } from './awards/awards.module';
+import { ShelfModule } from './shelf/shelf.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AwardsModule } from './awards/awards.module';
     AuthorModule,
     PublisherModule,
     AwardsModule,
+    ShelfModule,
   ],
   controllers: [],
   providers: [
