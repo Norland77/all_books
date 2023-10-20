@@ -21,4 +21,8 @@ export class ShelfService {
   deleteShelfById(id: string) {
     return this.shelfRepository.deleteShelfById(id);
   }
+
+  getAllShelfsByUserId(id: string) {
+    return this.shelfRepository.getAllShelfsByUserId(id);
+  }
 }

@@ -41,4 +41,12 @@ export class ShelfRepository {
       },
     });
   }
+
+  getAllShelfsByUserId(id: string) {
+    return this.prismaService.shelf.findMany({
+      where: {
+        userId: id,
+      },
+    });
+  }
 }

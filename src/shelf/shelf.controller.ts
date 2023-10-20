@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
 } from '@nestjs/common';
@@ -64,5 +65,16 @@ export class ShelfController {
     }
 
     return this.shelfService.deleteShelfById(id);
+  }
+
+  @Get('all/:Id')
+  async getAllShelfsByUserId(@Param('Id') id: string) {
+    const user = await this.userService.findUserById(id);
+
+    if (!user) {
+      throw new BadRequestException(`User with id: ${id} does not exist`);
+    }
+
+    return this.shelfService.getAllShelfsByUserId(id);
   }
 }
