@@ -60,20 +60,11 @@ model ResetPassword {
 }
 
 model Shelf {
-  id     String       @id @default(uuid())
+  id     String      @id @default(uuid())
   name   String
-  user   User         @relation(fields: [userId], references: [id])
+  user   User        @relation(fields: [userId], references: [id])
   userId String
-  books  ShelfBooks[]
-}
-
-model ShelfBooks {
-  shelf   Shelf  @relation(fields: [shelfId], references: [id])
-  shelfId String
-  book    Book   @relation(fields: [bookId], references: [id])
-  bookId  String
-
-  @@id([bookId, shelfId])
+  books  UserBooks[]
 }
 
 model Gender {
@@ -99,6 +90,7 @@ model Bans {
 }
 
 model UserBooks {
+  id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   book      Book     @relation(fields: [bookId], references: [id])
@@ -107,8 +99,7 @@ model UserBooks {
   statusId  Int
   addedAt   DateTime @default(now())
   readEndAt DateTime
-
-  @@id([bookId, userId])
+  shelf     Shelf[]
 }
 
 model Status {
@@ -140,24 +131,22 @@ model ReviewsLikeDislike {
 }
 
 model Book {
-  id                 String       @id @default(uuid())
-  title              String       @unique
-  authors            BookAuthor[]
-  genres             BookGenres[]
-  isbn               String       @unique
+  id                 String      @id @default(uuid())
+  title              String
+  authors            Author[]
+  genres             Genre[]
+  isbn               String      @unique
   publicationDate    DateTime
   numberOfPages      Int
   language           String
   image              String
   description        String
-  publisher          Publisher    @relation(fields: [publisherId], references: [id])
+  publisher          Publisher   @relation(fields: [publisherId], references: [id])
   publisherId        String
   publicationCountry String
   binding            Binding[]
-  bindingId          Int
-  awards             BookAwards[]
+  awards             Awards[]
   users              UserBooks[]
-  shelfs             ShelfBooks[]
   reviews            Reviews[]
 }
 
@@ -168,20 +157,11 @@ enum Binding {
 }
 
 model Awards {
-  id          String       @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String
   date        DateTime
-  books       BookAwards[]
-}
-
-model BookAwards {
-  book     Book   @relation(fields: [bookId], references: [id])
-  bookId   String
-  award    Awards @relation(fields: [awardsId], references: [id])
-  awardsId String
-
-  @@id([bookId, awardsId])
+  books       Book[]
 }
 
 model Publisher {
@@ -192,42 +172,24 @@ model Publisher {
 }
 
 model Genre {
-  id          String       @id @default(uuid())
-  name        String       @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String
-  books       BookGenres[]
-  children    Genre[]      @relation("genre-hierarchy")
-  parent      Genre?       @relation("genre-hierarchy", fields: [parentId], references: [id], onDelete: Cascade)
-  parentId     String?
-}
-
-model BookGenres {
-  book    Book   @relation(fields: [bookId], references: [id])
-  bookId  String
-  genre   Genre  @relation(fields: [genreId], references: [id])
-  genreId String
-
-  @@id([bookId])
+  books       Book[]
+  children    Genre[] @relation("genre-hierarchy")
+  parent      Genre?  @relation("genre-hierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId    String?
 }
 
 model Author {
-  id          String       @id @default(uuid())
-  books       BookAuthor[]
+  id          String   @id @default(uuid())
+  books       Book[]
   firstName   String
   lastName    String
   dateOfBirth DateTime
   country     String
   image       String
   bio         String
-}
-
-model BookAuthor {
-  book     Book   @relation(fields: [bookId], references: [id])
-  bookId   String
-  author   Author @relation(fields: [authorId], references: [id])
-  authorId String
-
-  @@id([bookId, authorId])
 }
 
 model News {

@@ -13,6 +13,7 @@ import { AuthorModule } from './author/author.module';
 import { PublisherModule } from './publisher/publisher.module';
 import { AwardsModule } from './awards/awards.module';
 import { ShelfModule } from './shelf/shelf.module';
+import { BookModule } from './book/book.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ShelfModule } from './shelf/shelf.module';
     PublisherModule,
     AwardsModule,
     ShelfModule,
+    BookModule,
   ],
   controllers: [],
   providers: [
