@@ -77,4 +77,15 @@ export class ShelfController {
 
     return this.shelfService.getAllShelfsByUserId(id);
   }
+
+  @Get('books/:Id')
+  async getBooksOnShelf(@Param('Id') id: string) {
+    const shelf = await this.shelfService.findShelfById(id);
+
+    if (!shelf) {
+      throw new BadRequestException(`There is no shelf with this id: ${id}`);
+    }
+
+    return this.shelfService.getBooksOnShelf(id);
+  }
 }

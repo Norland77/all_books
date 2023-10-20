@@ -35,6 +35,13 @@ export class UserRepository {
         },
         role: dto.role === 'Admin' ? ['USER', 'ADMIN'] : ['USER'],
         provider: dto.provider,
+        shelfs: {
+          create: [
+            { name: 'Читаю', isCustom: false },
+            { name: 'Прочитав', isCustom: false },
+            { name: 'В планах', isCustom: false },
+          ],
+        },
       },
     });
   }

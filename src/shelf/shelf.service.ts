@@ -25,4 +25,8 @@ export class ShelfService {
   getAllShelfsByUserId(id: string) {
     return this.shelfRepository.getAllShelfsByUserId(id);
   }
+
+  getBooksOnShelf(id: string) {
+    return this.shelfRepository.getBooksOnShelf(id);
+  }
 }

@@ -60,11 +60,12 @@ model ResetPassword {
 }
 
 model Shelf {
-  id     String      @id @default(uuid())
-  name   String
-  user   User        @relation(fields: [userId], references: [id])
-  userId String
-  books  UserBooks[]
+  id       String      @id @default(uuid())
+  name     String
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  isCustom Boolean     @default(true)
+  books    UserBooks[]
 }
 
 model Gender {
@@ -76,13 +77,13 @@ model Gender {
 model Following {
   id          String @id @default(uuid())
   userId      String
-  following   User   @relation(fields: [userId], references: [id])
+  following   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   followingId String
 }
 
 model Bans {
   id         String    @id @default(uuid())
-  user       User      @relation(fields: [userId], references: [id])
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   bannedAt   DateTime  @default(now())
   unbannedAt DateTime?
@@ -90,29 +91,28 @@ model Bans {
 }
 
 model UserBooks {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
+  id        String    @id @default(uuid())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  book      Book     @relation(fields: [bookId], references: [id])
+  book      Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
   bookId    String
-  status    Status   @relation(fields: [statusId], references: [id])
-  statusId  Int
-  addedAt   DateTime @default(now())
-  readEndAt DateTime
+  status    Status
+  addedAt   DateTime  @default(now())
+  readEndAt DateTime?
   shelf     Shelf[]
 }
 
-model Status {
-  id          Int         @id @default(autoincrement())
-  description String      @unique
-  userBooks   UserBooks[]
+enum Status {
+  READ
+  CURRENTLY_READING
+  WANT_TO_READ
 }
 
 model Reviews {
   id        String               @id @default(uuid())
-  book      Book                 @relation(fields: [bookId], references: [id])
+  book      Book                 @relation(fields: [bookId], references: [id], onDelete: Cascade)
   bookId    String
-  user      User                 @relation(fields: [userId], references: [id])
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   rating    Int
   title     String
@@ -123,9 +123,9 @@ model Reviews {
 
 model ReviewsLikeDislike {
   id       Int     @id @default(autoincrement())
-  reviev   Reviews @relation(fields: [reviewId], references: [id])
+  reviev   Reviews @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId String
-  user     User    @relation(fields: [userId], references: [id])
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String
   isLike   Boolean
 }

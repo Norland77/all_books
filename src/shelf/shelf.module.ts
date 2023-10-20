@@ -8,5 +8,6 @@ import { UserModule } from '../user/user.module';
   providers: [ShelfService, ShelfRepository],
   controllers: [ShelfController, ShelfRepository],
   imports: [UserModule],
+  exports: [ShelfService],
 })
 export class ShelfModule {}

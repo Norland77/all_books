@@ -49,4 +49,15 @@ export class ShelfRepository {
       },
     });
   }
+
+  getBooksOnShelf(id: string) {
+    return this.prismaService.shelf.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        books: true,
+      },
+    });
+  }
 }

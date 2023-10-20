@@ -144,4 +144,15 @@ export class BookController {
 
     return this.bookService.getBooksByAward(award.id);
   }
+
+  @Get('/:Id')
+  async getBookById(@Param('Id') id: string) {
+    const book = await this.bookService.findBookById(id);
+
+    if (!book) {
+      throw new BadRequestException(`There is no books with this ID: ${id}`);
+    }
+
+    return book;
+  }
 }

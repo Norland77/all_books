@@ -14,6 +14,7 @@ import { PublisherModule } from './publisher/publisher.module';
 import { AwardsModule } from './awards/awards.module';
 import { ShelfModule } from './shelf/shelf.module';
 import { BookModule } from './book/book.module';
+import { UserBookModule } from './user-book/user-book.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { BookModule } from './book/book.module';
     AwardsModule,
     ShelfModule,
     BookModule,
+    UserBookModule,
   ],
   controllers: [],
   providers: [
