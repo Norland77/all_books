@@ -5,8 +5,8 @@ import {
   Delete,
   Get,
   Param,
-  Post,
-} from '@nestjs/common';
+  Post, Put
+} from "@nestjs/common";
 import { BookService } from './book.service';
 import { BookDto } from './dto/book.dto';
 import { AuthorService } from '../author/author.service';
@@ -156,8 +156,8 @@ export class BookController {
     return book;
   }
 
-  @Get('average/:Id')
-  async getAverageRatingById(@Param('Id') id: string) {
+  @Put('average/:Id')
+  async setAverageRatingById(@Param('Id') id: string) {
     const book = await this.bookService.findBookById(id);
 
     if (!book) {
@@ -184,6 +184,8 @@ export class BookController {
       averageRating += allReviews[i].rating;
     }
 
-    return { averageRating: (averageRating / allReviews.length).toFixed(2) };
+    const averageRatingStr = (averageRating / allReviews.length).toFixed(2);
+
+    return this.bookService.setAverageRatingById(id, averageRatingStr);
   }
 }

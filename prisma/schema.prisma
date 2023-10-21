@@ -145,6 +145,7 @@ model Book {
   publisher          Publisher   @relation(fields: [publisherId], references: [id])
   publisherId        String
   publicationCountry String
+  averageRating      String      @default("0")
   binding            Binding[]
   awards             Awards[]
   users              UserBooks[]

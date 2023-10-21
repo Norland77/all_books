@@ -187,4 +187,18 @@ export class BookRepository {
       },
     });
   }
+
+  setAverageRatingById(id: string, averageRatingStr: string) {
+    return this.prismaService.book.update({
+      where: {
+        id,
+      },
+      data: {
+        averageRating: averageRatingStr,
+      },
+      select: {
+        averageRating: true,
+      },
+    });
+  }
 }

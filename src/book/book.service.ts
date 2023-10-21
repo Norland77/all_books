@@ -54,4 +54,8 @@ export class BookService {
   async getReviewsById(id: string) {
     return this.bookRepository.getReviewsById(id);
   }
+
+  setAverageRatingById(id: string, averageRatingStr: string) {
+    return this.bookRepository.setAverageRatingById(id, averageRatingStr);
+  }
 }
