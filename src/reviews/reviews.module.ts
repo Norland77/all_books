@@ -8,5 +8,6 @@ import { UserModule } from '../user/user.module';
   providers: [ReviewsService, ReviewsRepository],
   controllers: [ReviewsController, ReviewsRepository],
   imports: [UserModule],
+  exports: [ReviewsService],
 })
 export class ReviewsModule {}

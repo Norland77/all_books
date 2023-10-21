@@ -16,6 +16,7 @@ import { ShelfModule } from './shelf/shelf.module';
 import { BookModule } from './book/book.module';
 import { UserBookModule } from './user-book/user-book.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { ReviewsLikeDislikeModule } from './reviews-like-dislike/reviews-like-dislike.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     BookModule,
     UserBookModule,
     ReviewsModule,
+    ReviewsLikeDislikeModule,
   ],
   controllers: [],
   providers: [

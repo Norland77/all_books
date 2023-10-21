@@ -123,7 +123,7 @@ model Reviews {
 }
 
 model ReviewsLikeDislike {
-  id       Int     @id @default(autoincrement())
+  id       String     @id @default(uuid())
   reviev   Reviews @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId String
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
