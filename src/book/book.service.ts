@@ -50,4 +50,8 @@ export class BookService {
   getBooksByAward(id: string) {
     return this.bookRepository.getBooksByAward(id);
   }
+
+  async getReviewsById(id: string) {
+    return this.bookRepository.getReviewsById(id);
+  }
 }

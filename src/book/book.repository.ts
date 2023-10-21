@@ -117,6 +117,7 @@ export class BookRepository {
         awards: true,
         authors: true,
         genres: true,
+        reviews: true,
       },
     });
   }
@@ -172,6 +173,17 @@ export class BookRepository {
             id,
           },
         },
+      },
+    });
+  }
+
+  getReviewsById(id: string) {
+    return this.prismaService.book.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        reviews: true,
       },
     });
   }

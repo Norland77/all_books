@@ -155,4 +155,35 @@ export class BookController {
 
     return book;
   }
+
+  @Get('average/:Id')
+  async getAverageRatingById(@Param('Id') id: string) {
+    const book = await this.bookService.findBookById(id);
+
+    if (!book) {
+      throw new BadRequestException(`There is no books with this ID: ${id}`);
+    }
+
+    const reviews = await this.bookService.getReviewsById(id);
+
+    if (!reviews) {
+      throw new BadRequestException(
+        `There is no reviews to book with this ID: ${id}`,
+      );
+    }
+
+    const allReviews = reviews.reviews;
+
+    let averageRating: number = 0;
+
+    if (allReviews.length === 0) {
+      return { averageRating: averageRating };
+    }
+
+    for (let i = 0; i < allReviews.length; i++) {
+      averageRating += allReviews[i].rating;
+    }
+
+    return { averageRating: (averageRating / allReviews.length).toFixed(2) };
+  }
 }
