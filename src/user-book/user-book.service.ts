@@ -29,4 +29,8 @@ export class UserBookService {
   addBookToShelfById(bookId: string, shelfId: string) {
     return this.userBookRepository.addBookToShelfById(bookId, shelfId);
   }
+
+  changeStatusBook(bookId: string, statusName: string) {
+    return this.userBookRepository.changeStatusBook(bookId, statusName);
+  }
 }

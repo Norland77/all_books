@@ -11,6 +11,8 @@ import { UserBookService } from './user-book.service';
 import { Cookie } from '../../libs/common/src/decorators';
 import { UserService } from '../user/user.service';
 import { ShelfService } from '../shelf/shelf.service';
+import { $Enums } from '../../prisma/generated/client';
+import Status = $Enums.Status;
 const REFRESH_TOKEN = 'refreshtoken';
 @Controller('user-book')
 export class UserBookController {
@@ -120,5 +122,29 @@ export class UserBookController {
     }
 
     return this.userBookService.addBookToShelfById(bookId, shelfId);
+  }
+
+  @Put('change-shelf-bystatus/:Id/:Name')
+  async changeShelfByStatus(
+    @Param('Id') bookId: string,
+    @Param('Name') statusName: string,
+  ) {
+    const book = await this.userBookService.findUserBookById(bookId);
+
+    if (!book) {
+      throw new BadRequestException(
+        `There is no user-book with this id: ${bookId}`,
+      );
+    }
+
+    if (
+      statusName !== Status.READ &&
+      statusName !== Status.CURRENTLY_READING &&
+      statusName !== Status.WANT_TO_READ
+    ) {
+      throw new BadRequestException('There is no status with this name');
+    }
+
+    return this.userBookService.changeStatusBook(bookId, statusName);
   }
 }
