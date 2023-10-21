@@ -114,10 +114,11 @@ model Reviews {
   bookId    String
   user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  rating    Int
+  rating    Float
   title     String
   body      String
-  createdAt DateTime
+  createdAt DateTime             @default(now())
+  updateAt  DateTime             @updatedAt
   likes     ReviewsLikeDislike[]
 }
 
