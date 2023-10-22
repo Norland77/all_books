@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { GenderModule } from './gender/gender.module';
 import { AuthModule } from './auth/auth.module';
@@ -17,6 +16,8 @@ import { BookModule } from './book/book.module';
 import { UserBookModule } from './user-book/user-book.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ReviewsLikeDislikeModule } from './reviews-like-dislike/reviews-like-dislike.module';
+import { ResetPasswordModule } from './reset-password/reset-password.module';
+import { PrismaModule } from "@prisma/prisma.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ReviewsLikeDislikeModule } from './reviews-like-dislike/reviews-like-di
     UserBookModule,
     ReviewsModule,
     ReviewsLikeDislikeModule,
+    ResetPasswordModule,
   ],
   controllers: [],
   providers: [
