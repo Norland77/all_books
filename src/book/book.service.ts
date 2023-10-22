@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { BookRepository } from './book.repository';
 import { Author, Awards, Genre } from '../../prisma/generated/client';
 import { BookDto } from './dto/book.dto';
@@ -55,7 +55,29 @@ export class BookService {
     return this.bookRepository.getReviewsById(id);
   }
 
-  setAverageRatingById(id: string, averageRatingStr: string) {
+  async setAverageRatingById(id: string) {
+    const reviews = await this.getReviewsById(id);
+
+    if (!reviews) {
+      throw new BadRequestException(
+        `There is no reviews to book with this ID: ${id}`,
+      );
+    }
+
+    const allReviews = reviews.reviews;
+
+    let averageRating: number = 0;
+
+    if (allReviews.length === 0) {
+      return { averageRating: averageRating };
+    }
+
+    for (let i = 0; i < allReviews.length; i++) {
+      averageRating += allReviews[i].rating;
+    }
+
+    const averageRatingStr = (averageRating / allReviews.length).toFixed(2);
+
     return this.bookRepository.setAverageRatingById(id, averageRatingStr);
   }
 }

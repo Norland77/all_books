@@ -164,28 +164,6 @@ export class BookController {
       throw new BadRequestException(`There is no books with this ID: ${id}`);
     }
 
-    const reviews = await this.bookService.getReviewsById(id);
-
-    if (!reviews) {
-      throw new BadRequestException(
-        `There is no reviews to book with this ID: ${id}`,
-      );
-    }
-
-    const allReviews = reviews.reviews;
-
-    let averageRating: number = 0;
-
-    if (allReviews.length === 0) {
-      return { averageRating: averageRating };
-    }
-
-    for (let i = 0; i < allReviews.length; i++) {
-      averageRating += allReviews[i].rating;
-    }
-
-    const averageRatingStr = (averageRating / allReviews.length).toFixed(2);
-
-    return this.bookService.setAverageRatingById(id, averageRatingStr);
+    return this.bookService.setAverageRatingById(id);
   }
 }

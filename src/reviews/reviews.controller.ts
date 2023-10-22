@@ -11,6 +11,7 @@ import { ReviewsService } from './reviews.service';
 import { ReviewDto } from './dto/review.dto';
 import { Cookie } from '../../libs/common/src/decorators';
 import { UserService } from '../user/user.service';
+import { BookService } from '../book/book.service';
 const REFRESH_TOKEN = 'refreshtoken';
 
 @Controller('reviews')
@@ -18,6 +19,7 @@ export class ReviewsController {
   constructor(
     private readonly reviewsService: ReviewsService,
     private readonly userService: UserService,
+    private readonly bookService: BookService,
   ) {}
 
   @Post('create/:Id')
@@ -32,6 +34,22 @@ export class ReviewsController {
       throw new BadRequestException();
     }
 
+    const book = await this.bookService.findBookById(bookId);
+
+    if (!book) {
+      throw new BadRequestException(
+        `There is no books with this ID: ${bookId}`,
+      );
+    }
+
+    const reviews = await this.bookService.getReviewsById(bookId);
+
+    if (!reviews) {
+      throw new BadRequestException(
+        `There is no reviews to book with this ID: ${bookId}`,
+      );
+    }
+
     const review = await this.reviewsService.findReviewByTitleOrBody(
       dto.title,
       dto.body,
@@ -41,7 +59,17 @@ export class ReviewsController {
       throw new BadRequestException('This title or body is already in use');
     }
 
-    return this.reviewsService.createReview(dto, user.userId, bookId);
+    const createdReview = await this.reviewsService.createReview(
+      dto,
+      user.userId,
+      bookId,
+    );
+
+    if (!createdReview) {
+      throw new BadRequestException();
+    }
+
+    return this.bookService.setAverageRatingById(bookId);
   }
 
   @Put('update/:Id')
@@ -68,7 +96,13 @@ export class ReviewsController {
       );
     }
 
-    return this.reviewsService.editReviewById(dto, id);
+    const createdReview = await this.reviewsService.editReviewById(dto, id);
+
+    if (!createdReview) {
+      throw new BadRequestException();
+    }
+
+    return this.bookService.setAverageRatingById(review.bookId);
   }
 
   @Delete('delete/:Id')

@@ -196,8 +196,8 @@ export class BookRepository {
       data: {
         averageRating: averageRatingStr,
       },
-      select: {
-        averageRating: true,
+      include: {
+        reviews: true,
       },
     });
   }
