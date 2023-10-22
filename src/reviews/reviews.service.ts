@@ -52,8 +52,8 @@ export class ReviewsService {
       }
     }
 
-    reviewRating.toFixed();
+    const newReviewRating = reviewRating.toFixed();
 
-    return this.reviewsRepository.setReviewRating(id, reviewRating);
+    return this.reviewsRepository.setReviewRating(id, newReviewRating);
   }
 }

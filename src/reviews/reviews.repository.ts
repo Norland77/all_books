@@ -69,13 +69,13 @@ export class ReviewsRepository {
     });
   }
 
-  setReviewRating(id: string, reviewRating: number) {
+  setReviewRating(id: string, reviewRating: string) {
     return this.prismaService.reviews.update({
       where: {
         id,
       },
       data: {
-        rating: reviewRating,
+        reviewRating: reviewRating,
       },
     });
   }
