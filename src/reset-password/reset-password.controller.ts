@@ -9,10 +9,14 @@ import { ResetPasswordService } from './reset-password.service';
 import { createTransport } from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 import { Public } from '../../libs/common/src/decorators';
+import { UserService } from '../user/user.service';
 @Public()
 @Controller('reset-password')
 export class ResetPasswordController {
-  constructor(private readonly resetPasswordService: ResetPasswordService) {}
+  constructor(
+    private readonly resetPasswordService: ResetPasswordService,
+    private readonly userService: UserService,
+  ) {}
 
   transporter = createTransport({
     host: 'smtp.gmail.com',
@@ -28,14 +32,14 @@ export class ResetPasswordController {
   async resetPasswordByEmail(@Param('Email') email: string) {
     const token = uuidv4();
 
-    const info = await this.transporter.sendMail({
+    const mail = await this.transporter.sendMail({
       from: '"Nikita Foka" <allbooksukraine@gmail.com>',
       to: email,
       subject: 'Відновлення паролю',
       text: `Для відновлення паролю перейдіть за посиланням http://localhost:3000/api/reset-password/verify/${token}`,
     });
 
-    if (!info) {
+    if (!mail) {
       throw new BadRequestException('Email dont receive');
     }
 
