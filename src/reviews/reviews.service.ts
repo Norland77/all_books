@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ReviewsRepository } from './reviews.repository';
 import { ReviewDto } from './dto/review.dto';
 
@@ -24,5 +24,36 @@ export class ReviewsService {
 
   deleteReviewById(id: string) {
     return this.reviewsRepository.deleteReviewById(id);
+  }
+
+  async setReviewRating(id: string) {
+    let reviewRating: number = 0;
+
+    const likesAndDislikes =
+      await this.reviewsRepository.getAllLikeDislikesById(id);
+
+    if (!likesAndDislikes) {
+      throw new BadRequestException(
+        `There is no likes or dislikes to review with this ID: ${id}`,
+      );
+    }
+
+    const allLikes = likesAndDislikes.likes;
+
+    if (allLikes.length === 0) {
+      return { reviewRating: reviewRating };
+    }
+
+    for (let i = 0; i < allLikes.length; i++) {
+      if (allLikes[i].isLike) {
+        reviewRating++;
+      } else {
+        reviewRating--;
+      }
+    }
+
+    reviewRating.toFixed();
+
+    return this.reviewsRepository.setReviewRating(id, reviewRating);
   }
 }

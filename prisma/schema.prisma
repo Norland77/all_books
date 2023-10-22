@@ -109,21 +109,22 @@ enum Status {
 }
 
 model Reviews {
-  id        String               @id @default(uuid())
-  book      Book                 @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  bookId    String
-  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  rating    Float
-  title     String
-  body      String
-  createdAt DateTime             @default(now())
-  updateAt  DateTime             @updatedAt
-  likes     ReviewsLikeDislike[]
+  id           String               @id @default(uuid())
+  book         Book                 @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId       String
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  rating       Float
+  title        String
+  body         String
+  reviewRating String               @default("0")
+  createdAt    DateTime             @default(now())
+  updateAt     DateTime             @updatedAt
+  likes        ReviewsLikeDislike[]
 }
 
 model ReviewsLikeDislike {
-  id       String     @id @default(uuid())
+  id       String  @id @default(uuid())
   reviev   Reviews @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId String
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -130,4 +130,15 @@ export class ReviewsController {
 
     return this.reviewsService.deleteReviewById(id);
   }
+
+  @Put('set-review-rating/:Id')
+  async setReviewRating(@Param('Id') id: string) {
+    const review = await this.reviewsService.findReviewById(id);
+
+    if (!review) {
+      throw new BadRequestException(`There is no review with this id: ${id}`);
+    }
+
+    return this.reviewsService.setReviewRating(id);
+  }
 }

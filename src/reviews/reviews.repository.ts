@@ -57,4 +57,26 @@ export class ReviewsRepository {
       },
     });
   }
+
+  async getAllLikeDislikesById(id: string) {
+    return this.prismaService.reviews.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        likes: true,
+      },
+    });
+  }
+
+  setReviewRating(id: string, reviewRating: number) {
+    return this.prismaService.reviews.update({
+      where: {
+        id,
+      },
+      data: {
+        rating: reviewRating,
+      },
+    });
+  }
 }

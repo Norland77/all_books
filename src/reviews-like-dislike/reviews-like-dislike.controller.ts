@@ -42,12 +42,24 @@ export class ReviewsLikeDislikeController {
     );
 
     if (!like) {
-      return this.reviewsLikeDislikeService.likeReviewById(id, user.userId);
-    } else if (!like.isLike) {
-      return this.reviewsLikeDislikeService.changeLikeOrDislike(
-        like.id,
-        like.isLike,
+      const setLike = await this.reviewsLikeDislikeService.likeReviewById(
+        id,
+        user.userId,
       );
+      if (!setLike) {
+        throw new BadRequestException();
+      }
+      return this.reviewsService.setReviewRating(id);
+    } else if (!like.isLike) {
+      const setDislike =
+        await this.reviewsLikeDislikeService.changeLikeOrDislike(
+          like.id,
+          like.isLike,
+        );
+      if (!setDislike) {
+        throw new BadRequestException();
+      }
+      return this.reviewsService.setReviewRating(id);
     } else {
       throw new BadRequestException('You have already liked');
     }
@@ -76,12 +88,23 @@ export class ReviewsLikeDislikeController {
     );
 
     if (!dislike) {
-      return this.reviewsLikeDislikeService.dislikeReviewById(id, user.userId);
+      const setDislike = await this.reviewsLikeDislikeService.dislikeReviewById(
+        id,
+        user.userId,
+      );
+      if (!setDislike) {
+        throw new BadRequestException();
+      }
+      return this.reviewsService.setReviewRating(id);
     } else if (dislike.isLike) {
-      return this.reviewsLikeDislikeService.changeLikeOrDislike(
+      const setLike = await this.reviewsLikeDislikeService.changeLikeOrDislike(
         dislike.id,
         dislike.isLike,
       );
+      if (!setLike) {
+        throw new BadRequestException();
+      }
+      return this.reviewsService.setReviewRating(id);
     } else {
       throw new BadRequestException('You have already disliked');
     }
