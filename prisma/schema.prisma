@@ -199,5 +199,5 @@ model News {
   id          String   @id @default(uuid())
   title       String   @unique
   description String
-  date        DateTime
+  date        DateTime @default(now())
 }

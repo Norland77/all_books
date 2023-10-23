@@ -18,6 +18,7 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { ReviewsLikeDislikeModule } from './reviews-like-dislike/reviews-like-dislike.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
 import { PrismaModule } from "@prisma/prisma.module";
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { PrismaModule } from "@prisma/prisma.module";
     ReviewsModule,
     ReviewsLikeDislikeModule,
     ResetPasswordModule,
+    NewsModule,
   ],
   controllers: [],
   providers: [
