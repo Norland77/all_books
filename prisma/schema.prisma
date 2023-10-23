@@ -16,8 +16,8 @@ model User {
   password     String
   first_name   String               @default("")
   last_name    String               @default("")
-  gender       Gender               @relation(fields: [genderId], references: [id])
-  genderId     Int                  @default(3)
+  gender       Gender               @relation(fields: [genderId], references: [id], onDelete: SetDefault)
+  genderId     String               @default("")
   avatar       String               @default("")
   country      String               @default("")
   createdAt    DateTime             @default(now())
@@ -69,7 +69,7 @@ model Shelf {
 }
 
 model Gender {
-  id   Int    @id @default(autoincrement())
+  id   String    @id @default(uuid())
   name String
   user User[]
 }

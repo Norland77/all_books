@@ -5,15 +5,20 @@ import {
   Delete,
   Get,
   Param,
-  Post, Put
-} from "@nestjs/common";
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { BookService } from './book.service';
 import { BookDto } from './dto/book.dto';
 import { AuthorService } from '../author/author.service';
 import { GenreService } from '../genre/genre.service';
 import { AwardsService } from '../awards/awards.service';
-import { Author, Awards, Genre } from '../../prisma/generated/client';
+import { $Enums, Author, Awards, Genre } from '../../prisma/generated/client';
 import { PublisherService } from '../publisher/publisher.service';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../../libs/common/src/decorators';
+import UserRole = $Enums.UserRole;
 
 @Controller('book')
 export class BookController {
@@ -25,6 +30,8 @@ export class BookController {
     private readonly publisherService: PublisherService,
   ) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Post('create')
   async createBook(@Body() dto: BookDto) {
     const book = await this.bookService.findBookByIsbn(dto.isbn);
@@ -95,6 +102,8 @@ export class BookController {
     return this.bookService.getAllBooks();
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Delete('delete/:Id')
   async deleteBookById(@Param('Id') id: string) {
     const book = await this.bookService.findBookById(id);

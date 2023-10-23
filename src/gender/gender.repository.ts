@@ -14,10 +14,30 @@ export class GenderRepository {
     });
   }
 
-  async findGenderById(genderId: number) {
+  async findGenderById(genderId: string) {
     return this.prismaService.gender.findUnique({
       where: {
         id: genderId,
+      },
+    });
+  }
+
+  deleteGender(id: string) {
+    return this.prismaService.gender.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  getAllGender() {
+    return this.prismaService.gender.findMany();
+  }
+
+  findGenderByName(name: string) {
+    return this.prismaService.gender.findFirst({
+      where: {
+        name,
       },
     });
   }

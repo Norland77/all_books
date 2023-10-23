@@ -1,19 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from './dto/user-create.dto';
-import { IJwtPayload } from '../auth/interfaces';
 import { UpdateUserDto } from './dto/user-update.dto';
+import { GenderService } from '../gender/gender.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly genderService: GenderService,
+  ) {}
 
   async getUserByName(username: string, email: string) {
-    return await this.userRepository.getUserByName(username, email);
+    return this.userRepository.getUserByName(username, email);
   }
 
   async createUser(dto: CreateUserDto) {
-    return await this.userRepository.createUser(dto);
+    const gender = await this.genderService.findGenderByName(dto.genderName);
+
+    if (!gender) {
+      throw new BadRequestException(
+        `No gender with this name: ${dto.genderName}`,
+      );
+    }
+
+    return this.userRepository.createUser(dto, gender.id);
   }
 
   async findUserById(Id: string) {
@@ -21,7 +32,7 @@ export class UserService {
   }
 
   async deleteUserById(Id: string) {
-    return await this.userRepository.deleteUserById(Id);
+    return this.userRepository.deleteUserById(Id);
   }
 
   async findUserByEmail(email: string) {
@@ -29,7 +40,15 @@ export class UserService {
   }
 
   async updateUserById(Id: string, dto: UpdateUserDto) {
-    return await this.userRepository.updateUserById(Id, dto);
+    const gender = await this.genderService.findGenderByName(dto.genderName);
+
+    if (!gender) {
+      throw new BadRequestException(
+        `No gender with this name: ${dto.genderName}`,
+      );
+    }
+
+    return await this.userRepository.updateUserById(Id, dto, gender.id);
   }
 
   async findUserByRefreshToken(token: string) {

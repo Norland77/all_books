@@ -5,15 +5,21 @@ import {
   Delete, Get,
   Param,
   Post,
-  Put
+  Put, UseGuards
 } from "@nestjs/common";
 import { NewsService } from './news.service';
 import { NewsDto } from './dto/news.dto';
+import { RolesGuard } from "../auth/guards/roles.guard";
+import { Roles } from "../../libs/common/src/decorators";
+import { $Enums } from "../../prisma/generated/client";
+import UserRole = $Enums.UserRole;
 
 @Controller('news')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Post('create')
   async createNews(@Body() dto: NewsDto) {
     const news = await this.newsService.findNewByTitleOrDesc(
@@ -30,6 +36,8 @@ export class NewsController {
     return this.newsService.createNews(dto);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Put('edit/:Id')
   async editNew(@Body() dto: NewsDto, @Param('Id') id: string) {
     const news = await this.newsService.findNewById(id);
@@ -41,6 +49,8 @@ export class NewsController {
     return this.newsService.editNew(id, dto);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Delete('delete/:Id')
   async deleteNewById(@Param('Id') id: string) {
     const news = await this.newsService.findNewById(id);

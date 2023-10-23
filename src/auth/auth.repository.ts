@@ -122,7 +122,7 @@ export class AuthRepository {
       .createUser({
         username: email,
         email,
-        genderId: 3,
+        genderName: 'Ніякий',
         provider: Provider.GOOGLE,
       })
       .catch((err) => {

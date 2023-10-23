@@ -23,7 +23,7 @@ export class RegisterDto {
   @IsString()
   last_name: string = '';
 
-  genderId: number = 3;
+  genderName: string;
 
   @IsString()
   country: string = '';

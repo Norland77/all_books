@@ -17,8 +17,9 @@ export class UserRepository {
     });
   }
 
-  createUser(dto: CreateUserDto) {
+  createUser(dto: CreateUserDto, genderId: string) {
     const hashedPassword = this.hashPassword(dto.password);
+
     return this.prismaService.user.create({
       data: {
         username: dto.username,
@@ -30,7 +31,7 @@ export class UserRepository {
         avatar: dto.avatar,
         gender: {
           connect: {
-            id: dto.genderId,
+            id: genderId,
           },
         },
         role: dto.role === 'Admin' ? ['USER', 'ADMIN'] : ['USER'],
@@ -46,7 +47,7 @@ export class UserRepository {
     });
   }
 
-  async updateUserById(Id: string, dto: UpdateUserDto) {
+  async updateUserById(Id: string, dto: UpdateUserDto, genderId: string) {
     console.log(dto);
     return this.prismaService.user.update({
       where: {
@@ -56,7 +57,7 @@ export class UserRepository {
         username: dto.username,
         first_name: dto.first_name,
         last_name: dto.last_name,
-        genderId: dto.genderId,
+        genderId: genderId,
         country: dto.country,
         avatar: dto.avatar,
       },

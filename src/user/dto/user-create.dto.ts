@@ -21,7 +21,7 @@ export class CreateUserDto {
   @IsString()
   last_name?: string;
 
-  genderId?: number;
+  genderName: string;
 
   @IsString()
   country?: string;
