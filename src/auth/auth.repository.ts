@@ -50,19 +50,19 @@ export class AuthRepository {
     return this.generateTokens(user, agent);
   }
 
-  logout(refreshToken: string) {
-    return this.prismaService.token.delete({ where: { token: refreshToken } });
+  logout(refreshtoken111: string) {
+    return this.prismaService.token.delete({ where: { token: refreshtoken111 } });
   }
 
-  async refreshTokens(refreshToken: string, agent: string): Promise<IToken> {
+  async refreshtoken111s(refreshtoken111: string, agent: string): Promise<IToken> {
     const token = await this.prismaService.token.findUnique({
-      where: { token: refreshToken },
+      where: { token: refreshtoken111 },
     });
     if (!token) {
       throw new UnauthorizedException();
     }
     await this.prismaService.token.delete({
-      where: { token: refreshToken },
+      where: { token: refreshtoken111 },
     });
     if (new Date(token.exp) < new Date()) {
       throw new UnauthorizedException();
@@ -76,20 +76,20 @@ export class AuthRepository {
   }
 
   private async generateTokens(user: IUser, agent: string): Promise<IToken> {
-    const accessToken =
-      'Bearer ' +
-      this.jwtService.sign({
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      });
+    const accessToken = this.jwtService.sign({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      avatar: user.avatar,
+      role: user.role,
+    });
 
-    const refreshToken = await this.getRefreshToken(user.id, agent);
+    const refreshtoken111 = await this.getrefreshtoken111(user.id, agent);
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshtoken111 };
   }
 
-  private async getRefreshToken(userId: string, agent: string): Promise<Token> {
+  private async getrefreshtoken111(userId: string, agent: string): Promise<Token> {
     const _token = await this.prismaService.token.findFirst({
       where: {
         userId: userId,

@@ -9,7 +9,7 @@ import { ReviewsLikeDislikeService } from './reviews-like-dislike.service';
 import { ReviewsService } from '../reviews/reviews.service';
 import { Cookie } from '../../libs/common/src/decorators';
 import { UserService } from '../user/user.service';
-const REFRESH_TOKEN = 'refreshtoken';
+const REFRESH_TOKEN = 'refreshtoken111';
 
 @Controller('reviews-like-dislike')
 export class ReviewsLikeDislikeController {
@@ -22,9 +22,9 @@ export class ReviewsLikeDislikeController {
   @Post('like/:Id')
   async likeReviewById(
     @Param('Id') id: string,
-    @Cookie(REFRESH_TOKEN) refreshToken: string,
+    @Cookie(REFRESH_TOKEN) refreshtoken111: string,
   ) {
-    const user = await this.userService.findUserByRefreshToken(refreshToken);
+    const user = await this.userService.findUserByrefreshtoken111(refreshtoken111);
 
     if (!user) {
       throw new BadRequestException();
@@ -68,9 +68,9 @@ export class ReviewsLikeDislikeController {
   @Post('dislike/:Id')
   async dislikeReviewById(
     @Param('Id') id: string,
-    @Cookie(REFRESH_TOKEN) refreshToken: string,
+    @Cookie(REFRESH_TOKEN) refreshtoken111: string,
   ) {
-    const user = await this.userService.findUserByRefreshToken(refreshToken);
+    const user = await this.userService.findUserByrefreshtoken111(refreshtoken111);
 
     if (!user) {
       throw new BadRequestException();

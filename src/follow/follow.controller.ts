@@ -8,7 +8,7 @@ import {
 import { FollowService } from './follow.service';
 import { Cookie } from '../../libs/common/src/decorators';
 import { UserService } from '../user/user.service';
-const REFRESH_TOKEN = 'refreshtoken';
+const REFRESH_TOKEN = 'refreshtoken111';
 @Controller('follow')
 export class FollowController {
   constructor(
@@ -19,7 +19,7 @@ export class FollowController {
   @Post('/:Id')
   async followById(
     @Param('Id') Id: string,
-    @Cookie(REFRESH_TOKEN) refreshToken: string,
+    @Cookie(REFRESH_TOKEN) refreshtoken111: string,
   ) {
     const followUser = await this.userService.findUserById(Id);
 
@@ -28,7 +28,7 @@ export class FollowController {
     }
 
     const currentUser =
-      await this.userService.findUserByRefreshToken(refreshToken);
+      await this.userService.findUserByrefreshtoken111(refreshtoken111);
 
     if (!currentUser) {
       throw new BadRequestException();
@@ -55,7 +55,7 @@ export class FollowController {
   @Delete('unfollow/:Id')
   async unfollowById(
     @Param('Id') Id: string,
-    @Cookie(REFRESH_TOKEN) refreshToken: string,
+    @Cookie(REFRESH_TOKEN) refreshtoken111: string,
   ) {
     const followUser = await this.userService.findUserById(Id);
 
@@ -64,7 +64,7 @@ export class FollowController {
     }
 
     const currentUser =
-      await this.userService.findUserByRefreshToken(refreshToken);
+      await this.userService.findUserByrefreshtoken111(refreshtoken111);
 
     if (!currentUser) {
       throw new BadRequestException();

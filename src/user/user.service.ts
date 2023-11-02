@@ -51,7 +51,7 @@ export class UserService {
     return await this.userRepository.updateUserById(Id, dto, gender.id);
   }
 
-  async findUserByRefreshToken(token: string) {
-    return this.userRepository.findUserByRefreshToken(token);
+  async findUserByrefreshtoken111(token: string) {
+    return this.userRepository.findUserByrefreshtoken111(token);
   }
 }

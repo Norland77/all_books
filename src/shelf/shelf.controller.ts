@@ -12,7 +12,7 @@ import { ShelfDto } from './dto/shelf.dto';
 import { Cookie } from '../../libs/common/src/decorators';
 import { UserService } from '../user/user.service';
 
-const REFRESH_TOKEN = 'refreshtoken';
+const REFRESH_TOKEN = 'refreshtoken111';
 
 @Controller('shelf')
 export class ShelfController {
@@ -24,9 +24,9 @@ export class ShelfController {
   @Post('create')
   async createShelf(
     @Body() dto: ShelfDto,
-    @Cookie(REFRESH_TOKEN) refreshToken: string,
+    @Cookie(REFRESH_TOKEN) refreshtoken111: string,
   ) {
-    const user = await this.userService.findUserByRefreshToken(refreshToken);
+    const user = await this.userService.findUserByrefreshtoken111(refreshtoken111);
 
     if (!user) {
       throw new BadRequestException();
@@ -44,9 +44,9 @@ export class ShelfController {
   @Delete('delete/:Id')
   async deleteShelfById(
     @Param('Id') id: string,
-    @Cookie(REFRESH_TOKEN) refreshToken: string,
+    @Cookie(REFRESH_TOKEN) refreshtoken111: string,
   ) {
-    const user = await this.userService.findUserByRefreshToken(refreshToken);
+    const user = await this.userService.findUserByrefreshtoken111(refreshtoken111);
 
     if (!user) {
       throw new BadRequestException();

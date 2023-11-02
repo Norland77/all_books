@@ -14,12 +14,12 @@ export class AuthService {
     return this.authRepository.login(dto, agent);
   }
 
-  refreshTokens(refreshToken: string, agent: string) {
-    return this.authRepository.refreshTokens(refreshToken, agent);
+  refreshtoken111s(refreshtoken111: string, agent: string) {
+    return this.authRepository.refreshtoken111s(refreshtoken111, agent);
   }
 
-  async logout(refreshToken: string) {
-    return this.authRepository.logout(refreshToken);
+  async logout(refreshtoken111: string) {
+    return this.authRepository.logout(refreshtoken111);
   }
 
   async googleAuth(email: string, agent: string) {

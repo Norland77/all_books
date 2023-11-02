@@ -9,7 +9,6 @@ export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   getUserByName(username: string, email: string) {
-    console.log('getUserByName');
     return this.prismaService.user.findFirst({
       where: {
         OR: [{ username: username }, { email: email }],
@@ -141,7 +140,7 @@ export class UserRepository {
     });
   }
 
-  findUserByRefreshToken(token: string) {
+  findUserByrefreshtoken111(token: string) {
     return this.prismaService.token.findFirst({
       where: {
         token,
